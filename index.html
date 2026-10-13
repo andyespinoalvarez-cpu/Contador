@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#3a1f4d">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>Mi primera app</title>
+<style>
+:root{--bg:#f3eef6;--ink:#2a1a36;--uva:#3a1f4d;--hoja:#6f9a3c;--card:#fff}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
+header{background:var(--uva);color:#fff;padding:28px 20px 24px}
+header h1{margin:0;font-size:1.5rem}
+header p{margin:6px 0 0;opacity:.8;font-size:.95rem}
+main{padding:20px;max-width:480px;margin:0 auto}
+.card{background:var(--card);border-radius:14px;padding:20px;margin-bottom:16px;box-shadow:0 1px 4px rgba(58,31,77,.15)}
+.num{font-size:4rem;font-weight:700;text-align:center;color:var(--uva);margin:4px 0}
+button{width:100%;padding:16px;border:0;border-radius:12px;font-size:1.1rem;font-weight:600;background:var(--hoja);color:#fff;margin-top:8px}
+button.sec{background:#e4dbea;color:var(--uva)}
+button:focus-visible{outline:3px solid var(--uva);outline-offset:2px}
+.estado{font-size:.95rem}
+.estado b{color:var(--uva)}
+</style>
+</head>
+<body>
+<header>
+  <h1>Mi primera app</h1>
+  <p>Prueba de app instalable</p>
+</header>
+<main>
+  <div class="card">
+    <p style="margin:0;text-align:center">Racimos revisados</p>
+    <div class="num" id="n">0</div>
+    <button id="mas">Sumar uno</button>
+    <button class="sec" id="reset">Reiniciar</button>
+  </div>
+  <div class="card estado">
+    <p style="margin:0 0 6px">Conexión: <b id="con">...</b></p>
+    <p style="margin:0">El número se guarda en tu celular aunque cierres la app.</p>
+  </div>
+</main>
+<script>
+const n=document.getElementById('n');
+let v=0;
+try{v=parseInt(localStorage.getItem('contador'))||0}catch(e){}
+n.textContent=v;
+function guardar(){try{localStorage.setItem('contador',v)}catch(e){}n.textContent=v}
+document.getElementById('mas').onclick=()=>{v++;guardar()};
+document.getElementById('reset').onclick=()=>{v=0;guardar()};
+function estado(){document.getElementById('con').textContent=navigator.onLine?'En línea':'Sin internet (modo offline)'}
+addEventListener('online',estado);addEventListener('offline',estado);estado();
+if('serviceWorker' in navigator){addEventListener('load',()=>navigator.serviceWorker.register('service-worker.js'))}
+</script>
+</body>
+</html>
